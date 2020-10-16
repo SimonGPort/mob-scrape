@@ -7,7 +7,8 @@ const cheerio = require('cheerio')
 
 // reloadMagic(app)
 
-const url = 'https://www.koodomobile.com/fr/rate-plans?INTCMP=KMNew_NavMenu_Shop_Plans'
+const urlKoodo = 'https://www.koodomobile.com/rate-plans'
+
 
 
 
@@ -18,20 +19,48 @@ const url = 'https://www.koodomobile.com/fr/rate-plans?INTCMP=KMNew_NavMenu_Shop
 app.use('/', express.static('build')); // Needed for the HTML and JS files
 app.use('/', express.static('public')); // Needed for local assets
 
-app.get("/test", async function (req, res, next) {
-    let response = "test"
-
-    response = await this.getTheHTML(url)
-    console.log(response)
+app.get("/koodo", async function (req, res, next) {
+    let response = await this.getTheHTML(urlKoodo)
     let $ = cheerio.load(response)
-    let array = []
-    $('.koodo-currency').each(function (i, element) {
-        console.log(i)
-        let $element = $(element)
-        array.push($element.text())
-    })
+    try {
+        let arrayPrice = []
+        $('.views-field-field-monthly-fee-value').children('.field-content').children('.koodo-currency').each(function (i, element) {
+            let $element = $(element)
+            arrayPrice.push($element.text())
+        })
+        let arrayCondition = []
+        $('.inside').children('.views-field-field-data-mobile-value').children('.field-content').each(function (i, element) {
+            let $element = $(element)
+            arrayCondition.push($element.text().trim().replace('\n', ' '))
+        })
+        let arrayTime = []
+        $('.inside').children('.views-field-field-canada-wide-any-min-mobile').children('.field-content').each(function (i, element) {
+            let $element = $(element)
+            arrayTime.push($element.text().trim().replace('\n', ' '))
+        })
+        let arrayText = []
+        $('.inside').children('.views-field-field-unlim-text-and-pic-mobile').children('.field-content').each(function (i, element) {
+            let $element = $(element)
+            arrayText.push($element.text().trim().replace('\n', ' '))
+        })
 
-    res.json(array)
+        let result = []
+        arrayPrice.forEach((value, idx) => {
+            let container = {}
+            container.price = arrayPrice[idx]
+            container.condition = arrayCondition[idx]
+            container.time = arrayTime[idx]
+            container.text = arrayText[idx]
+            result.push(container)
+        })
+
+        res.json(result)
+    }
+    catch (err) {
+        console.log("error", err);
+        res.send(JSON.stringify({ success: false }));
+        return;
+    }
 })
 
 getTheHTML = (url) => {

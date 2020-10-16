@@ -17,7 +17,7 @@ class App extends Component {
   }
 
   fethSession = async () => {
-    fetch('/test').then(res => res.json()).then(users => console.log(users))
+    fetch('/koodo').then(res => res.json()).then(users => console.log(users))
 
   }
 
