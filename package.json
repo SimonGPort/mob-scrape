@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "cheerio": "^1.0.0-rc.3",
     "node-fetch": "^2.6.1",
+    "puppeteer": "^5.4.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3"
