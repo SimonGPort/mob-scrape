@@ -1,4 +1,4 @@
-Il y a 3 facons de faire le feching.
+Il y a 3 facons de faire le fetching.
 
 1. La plus facile est de regarder dans le network et de fetch l'api qui donne les infos
 2. On peut utiliser cheerio pour prendre l'information dans des class.
